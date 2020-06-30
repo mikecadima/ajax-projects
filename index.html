@@ -6,26 +6,54 @@
     <title>Document</title>
 </head>
 <body>
-    <script>
-        const ajax = (url, callback) =>{
-    const request = new XMLHttpRequest();
+<div class="container"> 
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Eye color</th>
+                <th>Height</th>
+                <th>Mass</th>
+            </tr>
+        </thead>
+        <tbody id="data">
 
-    request.onreadystatechange = ()=>{
-        if(request.readyState === 4 && request.status === 200){
-            callback(request.response)
-        }
+        </tbody>
+    </table>
+</div>
+
+<!-- -------get json -------------->
+<script>
+
+const xhr = new XMLHttpRequest();
+
+xhr.onload = function(){
+    console.log(this);
+};
+//name.json is the filename you are attaching
+xhr.open("GET", "name.json");
+xhr.send();
+
+//fetching data from json to console
+fetch("./name.json")
+.then(function(resp){
+    return resp.json();
+})
+.then(function(data){
+    console.log(data)
+    if(data.length > 0){
+        var temp = "";
+        data.forEach((u)=>{
+            temp += "<tr>";
+            temp += "<td>"+u.name+"</td>";
+            temp += "<td>"+u.eye_color+"</td>";
+            temp += "<td>"+u.height+"</td>";
+            temp += "<td>"+u.mass+"</td></tr>";
+        })
+        document.getElementById("data").innerHTML = temp;
     }
-    request.open("GET",url)
-    request.send();
-}
-ajax("./names.json", (resp)=>console.log(JSON.parse(resp)))
+})
 
-const getPeople = (page = 1) => {
-    ajax(`https://swapi.dev/api/people/?page=${page}`,response=>console.log(JSON.parse(response)))
-}
-getPeople()
-getPeople(3)
-getPeople(5)
 
     </script>
 </body>
